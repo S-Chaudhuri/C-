@@ -1,0 +1,41 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+struct item{
+    int value,weight;
+    item(int value,int weight)
+        : value(value),weight(weight){}
+};
+bool cmp(struct item a,struct item b){
+    double r1=(double)a.value/a.weight;
+    double r2=(double)b.value/b.weight;
+    return r1>r2;
+}
+double knapsack(struct item arr[],int N,int size){
+    sort(arr,arr+size,cmp);
+    int currwei = 0;
+    double finalval = 0.0;
+    for(int i=0;i<size;++i){
+        if(currwei+arr[i].weight <=N){
+            currwei+=arr[i].weight;
+            finalval+=arr[i].value;
+        }
+        else{
+            int remain = N- currwei;
+            finalval+=arr[i].value * ((double)remain/arr[i].weight);
+            break;
+        }
+    }
+    return finalval;
+}
+int main()
+{
+    int N =30;
+    item arr[] = { { 100, 10 },
+                   { 280, 40 },
+                   { 120, 20 },
+                   { 120, 24 } };
+    int size = sizeof(arr)/sizeof(arr[0]);
+    cout << "Maximum profit earned = "<< knapsack(arr, N, size);
+    return 0;
+}
